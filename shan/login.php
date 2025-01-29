@@ -1,12 +1,11 @@
 <?php
-ob_start(); // Start output buffering
 session_start();
 include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usernumber = $_POST['user_number'];
     $password = $_POST['password'];
-    $role = $_POST['role']; // Get the selected role
+    $role = $_POST['role'];
 
     // Map the role to the corresponding table and columns
     switch ($role) {
@@ -47,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Store session data
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $role;
-        $_SESSION['user_name'] = $user['username'] ?? $user['admin_name'] ?? $user['username'] ?? $user['username'];
+        $_SESSION['user_name'] = $user['username'] ?? $user['username'] ?? $user['username'] ?? $user['username'];
         $_SESSION['user_email'] = $user['email'] ?? $user['email'] ?? $user['email'] ?? $user['email'];
         $_SESSION['user_contact'] = $user['student_contact'] ?? $user['admin_contact'] ?? $user['supervisor_contact'] ?? $user['coordinator_contact'];
 

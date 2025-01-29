@@ -21,6 +21,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
     // Connect to the database
     $conn = getConnection();
 
+    $receiverExists = false;
+
+    switch ($receiver_role) {
+        case 'admin':
+            $stmt = $conn->prepare("SELECT id FROM admins WHERE id = ?");
+            break;
+        case 'student':
+            $stmt = $conn->prepare("SELECT id FROM students WHERE id = ?");
+            break;
+        case 'supervisor':
+            $stmt = $conn->prepare("SELECT id FROM supervisors WHERE id = ?");
+            break;
+        case 'coordinator':
+            $stmt = $conn->prepare("SELECT id FROM coordinators WHERE id = ?");
+            break;
+        default:
+            die("Invalid receiver role.");
+    }
+
+    $stmt->bind_param("i", $receiver_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $receiverExists = true;
+    }
+
+    if (!$receiverExists) {
+        die("Error: Receiver does not exist.");
+    }
+
+
     // Prepare the query
     $stmt = $conn->prepare("
         INSERT INTO messages (sender_id, sender_role, receiver_id, receiver_role, message)
@@ -31,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
         exit;
     }
 
-    // Bind parameters
+    // Bind parameter
     $stmt->bind_param("isiss", $sender_id, $sender_role, $receiver_id, $receiver_role, $message);
 
     // Execute the query
@@ -47,4 +79,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
     echo "Unauthorized access or invalid request.";
     exit;
 }
-?>

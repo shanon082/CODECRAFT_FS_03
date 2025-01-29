@@ -21,10 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $supervisor_contact = $supervisor['supervisor_contact'];
     $supervisor_email = $supervisor['email'];
 
-    // // Insert into engineers table
-    // $insert_query = "INSERT INTO engineers(supervisor_name, supervisor_contact, student_name,  student_number, student_contact)
-    // VALUES ('$supervisor_username', '$supervisor_contact', '$student_name','$student_number', '$student_contact')";
-
     $insert_query = "INSERT INTO engineers(supervisor_name, supervisor_contact,supervisor_email, student_name,  student_number, student_contact, student_email )
     VALUES ('$supervisor_username', '$supervisor_contact','$supervisor_email', '$student_name','$student_number', '$student_contact', '$student_email')";
 

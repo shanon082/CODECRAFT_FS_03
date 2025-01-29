@@ -31,7 +31,7 @@ $stmt->bind_param("iiii", $user_id, $receiver_id, $receiver_id, $user_id);
 $stmt->execute();
 $messages = $stmt->get_result();
 
-// Display the messages
+// Display the message
 while ($msg = $messages->fetch_assoc()) {
     $sender_name = $msg['sender_id'] == $user_id ? 'You' : htmlspecialchars($msg['sender_name']);
     echo "<p><strong>$sender_name:</strong> " . htmlspecialchars($msg['message']) . "</p>";

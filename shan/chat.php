@@ -149,7 +149,6 @@ if ($receiver_id && $receiver_role) {
             <script>
                 const chatBox = document.getElementById("chat-box");
 
-                // This will ensure that the chat box is always scrolled to the bottom
                 chatBox.scrollTop = chatBox.scrollHeight;
             </script>
         <?php else: ?>

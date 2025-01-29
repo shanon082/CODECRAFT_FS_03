@@ -27,7 +27,7 @@
                     <option value="coordinator">Coordinator</option>
                 </select><br>
 
-                <input type="text" name="user_number" placeholder="User Number" required><br>
+                <input type="text" name="user_number" placeholder="User Number/ username" required><br>
                 <input type="password" name="password" placeholder="User Password" required><br>
 
                 <a href="forgot_password.html">Forgot password?</a>
