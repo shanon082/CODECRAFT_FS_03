@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+     
+ 
+   font-family: Arial, sans-serif;
+    background-image: url('image/log4.jpg');  
+    background-size: cover; 
+    background-position: center;   
+    background-repeat: no-repeat;  
+    height: 100vh;  
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Adds a white background with transparency */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+
+ 
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;  /* Reduced height */
+    width: 40%;    /* Reduced width */
+    background-color: white;
+    border-radius: 8px;  /* Reduced border-radius */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);  /* Reduced shadow */
+}
+
+.image-container, .form-container {
+    flex: 1;
+    height: 100%;
+}
+
+.image-container {
+    display: flex; /* Ensure it's a flex container for proper alignment */
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    flex-direction: column; /* Stacks elements vertically if necessary */
+   
+     
+    width:  100%; /* Allow the width to adjust automatically */
+    height: 100%; /* Let the height adjust automatically based on content */
+    overflow: hidden; /* Ensures no content spills outside the container */
+}
+
+.image {
+    width: 100%;  /* Reduced image width */
+      height: 100%; 
+    object-fit: fill;
+    border-radius: 2px;  /* Slightly rounded corners */
+    margin-top: 4px;  /* Tiny space from the top of surroundings */
+    margin-bottom: 4px;
+}
+
+.form-container {
+    padding: 15px;  /* Reduced padding */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #ffffff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);  /* Reduced shadow */
+}
+
+h2 {
+    margin-bottom: 10px;  /* Reduced margin */
+    color: #333;
+    font-size: 18px;  /* Reduced font size */
+    text-align: center;
+}
+
+input , #sel{
+    width: 100%;
+    padding: 8px;  /* Reduced padding */
+    margin: 6px 0;  /* Reduced margin */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;  /* Reduced font size */
+}
+
+button {
+    width: 100%;
+    padding: 10px;  /* Reduced padding */
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;  /* Reduced font size */
+    margin-top: 8px;  /* Reduced margin */
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+p {
+    margin-top: 10px;  /* Reduced margin */
+    text-align: center;
+    font-size: 12px;  /* Reduced font size */
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+form a {
+    margin-top: 5px;
+    font-size: 10px;
+}
+.error-message{ 
+    color: red;
+    display: none;
+    font-size: 8px;
+    margin-bottom: 5px;
+}
