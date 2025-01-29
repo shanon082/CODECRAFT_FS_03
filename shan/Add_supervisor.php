@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $spec = $_POST['specialization'];
     $password = $_POST['password'];
 
-    $sql = "INSERT INTO supervisors (supervisor_username, supervisor_contact,email, specialization, password) VALUES ('$name', '$contact', '$email', '$spec','$password')";
+    $sql = "INSERT INTO supervisors (username, supervisor_contact,email, specialization, password) VALUES ('$name', '$contact', '$email', '$spec','$password')";
         
 if (mysqli_query($conn, $sql)) {
     echo "<script>

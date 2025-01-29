@@ -42,18 +42,18 @@ $coordinator_id = $_SESSION['user_id']; // Use the user_id set in the session
                 <th>ID</th>
                 <th>Supervisor Name</th>
                 <th>Supervisor Contact</th>
-                <!-- <th>Supervisor Email</th> -->
+                <th>Supervisor Email</th>
                 <th>Student Name</th>
                 <th>Student Number</th>
                 <th>Student Contact</th>
-                <!-- <th>Student Email</th> -->
+                <th>Student Email</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
 
             <?php
             // Query to fetch supervisor and student data from the 'engineers' table
-            $sql = "SELECT id, supervisor_name, supervisor_contact, student_name, student_number, student_contact FROM engineers";
+            $sql = "SELECT id, supervisor_name, supervisor_contact, supervisor_email, student_name, student_number, student_contact,student_email FROM engineers";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -62,10 +62,11 @@ $coordinator_id = $_SESSION['user_id']; // Use the user_id set in the session
                         <td>" . htmlspecialchars($row["id"]) . "</td>
                         <td>" . htmlspecialchars($row["supervisor_name"]) . "</td>
                         <td>" . htmlspecialchars($row["supervisor_contact"]) . "</td>
-                        
+                        <td>" . htmlspecialchars($row["supervisor_email"]) . "</td>
                         <td>" . htmlspecialchars($row["student_name"]) . "</td>
                         <td>" . htmlspecialchars($row["student_number"]) . "</td>
                         <td>" . htmlspecialchars($row["student_contact"]) . "</td>
+                        <td>" . htmlspecialchars($row["student_email"]) . "</td>
                         
                         <td><a href='edit_assignment.php?id=" . htmlspecialchars($row["id"]) . "'>Edit</a></td>
                         <td><a href='delete_assignment.php?id=" . htmlspecialchars($row["id"]) . "'>Delete</a></td>

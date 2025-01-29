@@ -9,7 +9,7 @@ if (isset($_GET['id'])) {
     $id = $conn->real_escape_string($_GET['id']);
  
     
-    $sql = "SELECT  id, student_name, student_contact, student_number, email, password FROM students WHERE id = '$id'";
+    $sql = "SELECT  id, username, student_contact, student_number, email, password FROM students WHERE id = '$id'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $new_password = $conn->real_escape_string($_POST['password']);
     
 
-    $sql = "UPDATE students  SET  id=' $new_id', student_name='$new_name', student_contact='$new_contact', student_number='$new_number', email='$new_email',password='$new_password'  WHERE id='$new_id'";
+    $sql = "UPDATE students  SET  id=' $new_id', username='$new_name', student_contact='$new_contact', student_number='$new_number', email='$new_email',password='$new_password'  WHERE id='$new_id'";
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>
@@ -85,7 +85,7 @@ $conn->close();
             <input type="text" id="id" name="id" value="<?php echo htmlspecialchars($row['id']); ?>" readonly><br>
 
             <label for="student_name">student_name:</label>
-            <input type="text" id=" student_name" name=" student_name" value="<?php echo htmlspecialchars($row['student_name']); ?>"><br>
+            <input type="text" id=" student_name" name=" student_name" value="<?php echo htmlspecialchars($row['username']); ?>"><br>
 
             <label for="student_name">student_number:</label>
             <input type="text" id=" student_number" name="student_number" value="<?php echo htmlspecialchars($row['student_number']); ?>"><br>

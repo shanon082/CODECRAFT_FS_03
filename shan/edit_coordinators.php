@@ -9,7 +9,7 @@ if (isset($_GET['id'])) {
     $id = $conn->real_escape_string($_GET['id']);
  
     
-    $sql = "SELECT  id, coordinator_username, coordinator_contact, email, password  FROM coordinators WHERE id = '$id'";
+    $sql = "SELECT  id, username, coordinator_contact, email, password  FROM coordinators WHERE id = '$id'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $new_pass = $conn->real_escape_string($_POST['password']);
     
 
-    $sql = "UPDATE coordinators  SET  id=' $new_id', coordinator_username='$new_name', coordinator_contact='$new_contact', email='$new_email', password='$new_pass'  WHERE id='$new_id'";
+    $sql = "UPDATE coordinators  SET  id=' $new_id', username='$new_name', coordinator_contact='$new_contact', email='$new_email', password='$new_pass'  WHERE id='$new_id'";
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>
@@ -83,17 +83,16 @@ $conn->close();
             <input type="text" id="id" name="id" value="<?php echo htmlspecialchars($row['id']); ?>" readonly><br>
 
             <label for="coordinator_name">coordinator_name:</label>
-            <input type="text" id=" coordinator_name" name=" coordinator_name" value="<?php echo htmlspecialchars($row['coordinator_name']); ?>"><br>
+            <input type="text" id=" coordinator_name" name=" coordinator_name" value="<?php echo htmlspecialchars($row['username']); ?>"><br>
 
             <label for="coordinator_Contact"> coordinator_contact:</label>
             <input type="text" id="coordinator_contact" name="coordinator_contact" value="<?php echo htmlspecialchars($row['coordinator_contact']); ?>"><br>
 
-             
-
             <label for="coordinator_email"> coordinator_email:</label>
             <input type="text" id="coordinator_email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>"><br>
 
-            
+            <label for="coordinator_password"> coordinator_password:</label>
+            <input type="text" id="coordinator_password" name="password" value="<?php echo htmlspecialchars($row['password']); ?>"><br>
             
             <button type="submit" name="update" onclick="return confirm('Are you sure you want to update this record?');">Update</button>
             <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>

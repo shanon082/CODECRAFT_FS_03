@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['email'];
         $Upassword = $_POST['password'];
 
-        $sql = "INSERT INTO students ( student_name, student_number, student_contact, email,password) VALUES ('$name', '$student_number', '$contact', '$email', '$Upassword')";
+        $sql = "INSERT INTO students ( username, student_number, student_contact, email,password) VALUES ('$name', '$student_number', '$contact', '$email', '$Upassword')";
              
     if (mysqli_query($conn, $sql)) {
         echo "<script>
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['supervisor_email'];
         $spec = $_POST['specialization'];
 
-        $sql = "INSERT INTO supervisors (supervisor_name, supervisor_contact,supervisor_email, specialization) VALUES ('$name', '$contact', '$email', '$spec')";
+        $sql = "INSERT INTO supervisors (username, supervisor_contact,email, specialization) VALUES ('$name', '$contact', '$email', '$spec')";
             
     if (mysqli_query($conn, $sql)) {
         echo "<script>

@@ -31,10 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         SET 
             supervisor_name = '" . $supervisor['username'] . "', 
             supervisor_contact = '" . $supervisor['supervisor_contact'] . "', 
-             
+            supervisor_email = '" . $supervisor['email'] . "',
             student_name = '" . $student['username'] . "', 
             student_number = '" . $student['student_number'] . "', 
             student_contact = '" . $student['student_contact'] . "', 
+            student_email = '" . $student['email'] . "'
             
         WHERE id = $id";
 

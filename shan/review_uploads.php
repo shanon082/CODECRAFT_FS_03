@@ -51,10 +51,19 @@ $result = $conn->query($sql);
     <?php endif; ?>
 
     <!--set deadlines-->
-<form method="POST" action="set_student_deadline.php">
+<form method="POST" action="view_files.php">
     <label for="student_id">Select Student:</label>
     <select name="student_id" id="student_id">
-        <!-- Populate with assigned students from the database -->
+          <?php
+            include("db.php");
+            $students = $conn->query("SELECT id, username FROM students");
+
+            echo "<optgroup label='Students'>";
+            while ($student = $students->fetch_assoc()) {
+                echo "<option value='student_" . $student['id'] . "'>" . htmlspecialchars($student['username']) . "</option>";
+            }
+            echo "</optgroup>";
+            ?>
     </select>
 
     <label for="deadline_date">Set Deadline:</label>

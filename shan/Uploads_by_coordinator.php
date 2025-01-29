@@ -22,18 +22,18 @@
             <?php
             include("db.php");
             // Fetch recipients based on type
-            $students = $conn->query("SELECT id, student_name FROM students");
-            $supervisors = $conn->query("SELECT id, supervisor_username FROM supervisors");
+            $students = $conn->query("SELECT id, username FROM students");
+            $supervisors = $conn->query("SELECT id, username FROM supervisors");
 
             echo "<optgroup label='Students'>";
             while ($student = $students->fetch_assoc()) {
-                echo "<option value='student_" . $student['id'] . "'>" . htmlspecialchars($student['student_name']) . "</option>";
+                echo "<option value='student_" . $student['id'] . "'>" . htmlspecialchars($student['username']) . "</option>";
             }
             echo "</optgroup>";
 
             echo "<optgroup label='Supervisors'>";
             while ($supervisor = $supervisors->fetch_assoc()) {
-                echo "<option value='supervisor_" . $supervisor['id'] . "'>" . htmlspecialchars($supervisor['supervisor_username']) . "</option>";
+                echo "<option value='supervisor_" . $supervisor['id'] . "'>" . htmlspecialchars($supervisor['username']) . "</option>";
             }
             echo "</optgroup>";
             ?>

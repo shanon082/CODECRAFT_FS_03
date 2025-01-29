@@ -20,9 +20,9 @@ include("db.php")
             <select name="student_id" id="student_id">
                 <!-- Populate with students from the database -->
                 <?php
-                $students = $conn->query("SELECT id, student_name FROM students");
+                $students = $conn->query("SELECT id, username FROM students");
                 while ($student = $students->fetch_assoc()) {
-                    echo "<option value='" . $student['id'] . "'>" . htmlspecialchars($student['student_name']) . "</option>";
+                    echo "<option value='" . $student['id'] . "'>" . htmlspecialchars($student['username']) . "</option>";
                 }
                 ?>
             </select>
@@ -31,9 +31,9 @@ include("db.php")
             <select name="supervisor_id" id="supervisor_id">
                 <!-- Populate with supervisors from the database -->
                 <?php
-                $supervisors = $conn->query("SELECT id, supervisor_username FROM supervisors");
+                $supervisors = $conn->query("SELECT id, username FROM supervisors");
                 while ($supervisor = $supervisors->fetch_assoc()) {
-                    echo "<option value='" . $supervisor['id'] . "'>" . htmlspecialchars($supervisor['supervisor_username']) . "</option>";
+                    echo "<option value='" . $supervisor['id'] . "'>" . htmlspecialchars($supervisor['username']) . "</option>";
                 }
                 ?>
             </select>
