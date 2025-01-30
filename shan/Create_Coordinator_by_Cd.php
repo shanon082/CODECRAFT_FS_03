@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="create coordinator.css"> -->
     <title>Assign supervisor</title>
 </head>
 <?php
@@ -18,7 +17,6 @@ include("db.php")
         <form method="POST" action="assign_supervisor.php">
             <label for="student_id">Select Student:</label>
             <select name="student_id" id="student_id">
-                <!-- Populate with students from the database -->
                 <?php
                 $students = $conn->query("SELECT id, username FROM students");
                 while ($student = $students->fetch_assoc()) {
