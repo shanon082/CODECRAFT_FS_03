@@ -3,7 +3,7 @@ session_start();
 require 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSION['role'])) {
-    // Get the sender details from session
+
     $sender_id = $_SESSION['user_id'];
     $sender_role = $_SESSION['role'];
 
@@ -18,10 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
         exit;
     }
 
-    // Connect to the database
+   
     $conn = getConnection();
-
-    // Add debugging here to verify the passed variables
     if (empty($receiver_id) || empty($receiver_role) || empty($message)) {
         echo "Error: Missing required fields.";
         var_dump($receiver_id, $receiver_role, $message);
@@ -30,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
 
 
     $receiverExists = false;
+
     switch ($receiver_role) {
         case 'admin':
             $stmt = $conn->prepare("SELECT id FROM admins WHERE id = ?");
@@ -47,17 +46,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
             die("Invalid receiver role.");
     }
 
-    // Bind and execute the statement
     $stmt->bind_param("i", $receiver_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Check if the receiver exists
+   
+    
     if ($result->num_rows > 0) {
         $receiverExists = true;
     } else {
         echo "Error: Receiver does not exist.";
-        exit;  // Exit if receiver does not exist
+        exit;  
     }
 
     if ($receiverExists) {

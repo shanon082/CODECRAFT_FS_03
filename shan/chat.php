@@ -25,13 +25,24 @@ $query = "
 
 if ($user_role === 'student') {
     $stmt = $conn->prepare($query); 
-} else {
-    $query = "
-        SELECT id, username, 'supervisor' AS role FROM supervisors WHERE id != ?
-        UNION
-        SELECT id, username, 'coordinator' AS role FROM coordinators WHERE id != ?";
+} 
+else if ($user_role === 'supervisor') {
     $stmt = $conn->prepare($query);
 }
+else if ($user_role === 'coordinator') {
+    $stmt = $conn->prepare($query);
+}
+else{
+    $stmt = $conn->prepare($query);
+}
+
+// else {
+//     $query = "
+//         SELECT id, username, 'supervisor' AS role FROM supervisors WHERE id != ?
+//         UNION
+//         SELECT id, username, 'coordinator' AS role FROM coordinators WHERE id != ?";
+//     $stmt = $conn->prepare($query);
+// }
 
 $stmt->bind_param("iiii", $user_id, $user_id, $user_id, $user_id);
 $stmt->execute();
