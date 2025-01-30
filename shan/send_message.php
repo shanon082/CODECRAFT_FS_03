@@ -21,8 +21,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
     // Connect to the database
     $conn = getConnection();
 
-    $receiverExists = false;
+    // Add debugging here to verify the passed variables
+    if (empty($receiver_id) || empty($receiver_role) || empty($message)) {
+        echo "Error: Missing required fields.";
+        var_dump($receiver_id, $receiver_role, $message);
+        exit;
+    }
 
+
+    $receiverExists = false;
     switch ($receiver_role) {
         case 'admin':
             $stmt = $conn->prepare("SELECT id FROM admins WHERE id = ?");
@@ -40,40 +47,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'], $_SESSIO
             die("Invalid receiver role.");
     }
 
+    // Bind and execute the statement
     $stmt->bind_param("i", $receiver_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Check if the receiver exists
     if ($result->num_rows > 0) {
         $receiverExists = true;
+    } else {
+        echo "Error: Receiver does not exist.";
+        exit;  // Exit if receiver does not exist
     }
 
-    if (!$receiverExists) {
-        die("Error: Receiver does not exist.");
-    }
-
-
-    // Prepare the query
-    $stmt = $conn->prepare("
+    if ($receiverExists) {
+        // Proceed with message insertion
+        $stmt = $conn->prepare("
         INSERT INTO messages (sender_id, sender_role, receiver_id, receiver_role, message)
         VALUES (?, ?, ?, ?, ?)
     ");
-    if (!$stmt) {
-        echo "Error preparing statement: " . $conn->error;
-        exit;
-    }
-
-    // Bind parameter
-    $stmt->bind_param("isiss", $sender_id, $sender_role, $receiver_id, $receiver_role, $message);
-
-    // Execute the query
-    if ($stmt->execute()) {
-        // Redirect to the chat page for the same user
-        header("Location: chat.php?receiver_id=$receiver_id&role=$receiver_role");
-        exit;
-    } else {
-        echo "Error sending message: " . $stmt->error;
-        exit;
+        $stmt->bind_param("isiss", $sender_id, $sender_role, $receiver_id, $receiver_role, $message);
+        if ($stmt->execute()) {
+            header("Location: chat.php?receiver_id=$receiver_id&role=$receiver_role");
+            exit;
+        } else {
+            echo "Error sending message: " . $stmt->error;
+            exit;
+        }
     }
 } else {
     echo "Unauthorized access or invalid request.";

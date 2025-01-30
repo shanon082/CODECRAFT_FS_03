@@ -9,45 +9,52 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$user_role = $_SESSION['role']; // admin, student, supervisor, or coordinator
+$user_role = $_SESSION['role'];
 
-// Connect to the database
 $conn = getConnection();
 
-// Fetch all users across roles (exclude the current user)
+
 $query = "
     SELECT id, username, 'admin' AS role FROM admins WHERE id != ?
     UNION
-    SELECT id, username, 'student' AS role FROM students WHERE id != ?
+    SELECT id, username, 'student' AS role FROM students WHERE id != ? 
     UNION
     SELECT id, username, 'supervisor' AS role FROM supervisors WHERE id != ?
     UNION
     SELECT id, username, 'coordinator' AS role FROM coordinators WHERE id != ?";
-$stmt = $conn->prepare($query);
+
+if ($user_role === 'student') {
+    $stmt = $conn->prepare($query); 
+} else {
+    $query = "
+        SELECT id, username, 'supervisor' AS role FROM supervisors WHERE id != ?
+        UNION
+        SELECT id, username, 'coordinator' AS role FROM coordinators WHERE id != ?";
+    $stmt = $conn->prepare($query);
+}
+
 $stmt->bind_param("iiii", $user_id, $user_id, $user_id, $user_id);
 $stmt->execute();
 $users = $stmt->get_result();
+
 
 // Fetch messages between the two users
 $receiver_id = $_GET['receiver_id'] ?? null;
 $receiver_role = $_GET['role'] ?? null;
 $messages = null;
+$stmt = $conn->prepare("
+    SELECT m.*, 
+           (SELECT username FROM {$receiver_role}s WHERE id = m.sender_id) AS sender_username,
+           (SELECT username FROM {$receiver_role}s WHERE id = m.receiver_id) AS receiver_username
+    FROM messages m
+    WHERE (sender_id = ? AND receiver_id = ?) 
+       OR (sender_id = ? AND receiver_id = ?)
+    ORDER BY timestamp ASC
+");
+$stmt->bind_param("iiii", $user_id, $receiver_id, $receiver_id, $user_id);
+$stmt->execute();
+$messages = $stmt->get_result();
 
-if ($receiver_id && $receiver_role) {
-    // Fetch messages
-    $stmt = $conn->prepare("
-        SELECT m.*, 
-               (SELECT username FROM {$receiver_role}s WHERE id = m.sender_id) AS sender_username,
-               (SELECT username FROM {$receiver_role}s WHERE id = m.receiver_id) AS receiver_username
-        FROM messages m
-        WHERE (sender_id = ? AND receiver_id = ?) 
-           OR (sender_id = ? AND receiver_id = ?)
-        ORDER BY timestamp ASC
-    ");
-    $stmt->bind_param("iiii", $user_id, $receiver_id, $receiver_id, $user_id);
-    $stmt->execute();
-    $messages = $stmt->get_result();
-}
 ?>
 
 <!DOCTYPE html>
