@@ -9,11 +9,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get selected student and supervisor ID
     $student_id = $_POST['student_id'];
     $supervisor_id = $_POST['supervisor_id'];
 
-    // Fetch student details
+
     $student_query = $conn->query("SELECT username, student_number, student_contact, email FROM students WHERE id = $student_id");
     $student = $student_query->fetch_assoc();
     $student_name = $student['username'];
@@ -21,26 +20,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $student_contact = $student['student_contact'];
     $student_email = $student['email'];
 
-    // Fetch supervisor details
     $supervisor_query = $conn->query("SELECT username, supervisor_contact, email FROM supervisors WHERE id = $supervisor_id");
     $supervisor = $supervisor_query->fetch_assoc();
     $supervisor_username = $supervisor['username'];
     $supervisor_contact = $supervisor['supervisor_contact'];
     $supervisor_email = $supervisor['email'];
 
-    // Insert into engineers table
-    $insert_query = "INSERT INTO engineers(supervisor_name, supervisor_contact,supervisor_email, student_name,  student_number, student_contact, student_email )
-    VALUES ('$supervisor_username', '$supervisor_contact','$supervisor_email', '$student_name','$student_number', '$student_contact', '$student_email')";
+
+    $insert_query = "INSERT INTO engineers(supervisor_id, supervisor_name, supervisor_contact, supervisor_email, student_id, student_name, student_number, student_contact, student_email) 
+VALUES ('$supervisor_id', '$supervisor_username', '$supervisor_contact', '$supervisor_email', '$student_id', '$student_name', '$student_number', '$student_contact', '$student_email')";
+
 
     if ($conn->query($insert_query) === TRUE) {
-        // Send email notifications
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
+            $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'kasaggaronald516@gmail.com'; // Your email
-            $mail->Password = 'mqnf ehqd qmtk fbes'; // Your email password
+            $mail->Username = 'kasaggaronald516@gmail.com';
+            $mail->Password = 'mqnf ehqd qmtk fbes'; 
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 

@@ -32,6 +32,29 @@ $student_id = $_SESSION['user_id']; // Use the user_id set in the session
         <h2>Welcome, <?php echo htmlspecialchars($_SESSION['user_name']); ?></h2>
         <button><a href="upload.php">Upload a report or proposal file</a></button>
 
+        <!-- Assigned Supervisor Section -->
+        <?php
+        $stmt = $conn->prepare("SELECT supervisor_name, supervisor_email, supervisor_contact 
+                        FROM engineers WHERE student_id = ?");
+        $stmt->bind_param("i", $student_id); // Using session user_id
+        $stmt->execute();
+        $result = $stmt->get_result();
+        ?>
+        <div>
+            <h2>Assigned Supervisor</h2>
+            <?php if ($result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <p><b>Name:</b> <?php echo htmlspecialchars($row['supervisor_name']); ?></p>
+                    <p><b>Email:</b> <?php echo htmlspecialchars($row['supervisor_email']); ?></p>
+                    <p><b>Contact:</b> <?php echo htmlspecialchars($row['supervisor_contact']); ?></p>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No supervisor assigned yet.</p>
+            <?php endif; ?>
+        </div>
+
+
+
         <!-- Announcements Section -->
         <?php
         $result = $conn->query("SELECT * FROM announcements WHERE audience IN ('students', 'all') ORDER BY created_at DESC");

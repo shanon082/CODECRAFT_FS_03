@@ -8,7 +8,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'supervisor') {
     exit;
 }
 
-$supervisor_id = $_SESSION['user_id']; // Use the user_id set in the session
+$supervisor_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +28,36 @@ $supervisor_id = $_SESSION['user_id']; // Use the user_id set in the session
         <h2>Welcome, <?php echo htmlspecialchars($_SESSION['user_name']); ?></h2>
         <p>Here you can manage and review student submissions.</p><br>
         <button><a href="review_uploads.php">Review Student Submissions</a></button>
+
+
+        <!-- Assigned Students Section -->
+        <?php
+        $stmt = $conn->prepare("SELECT student_name, student_number, student_email, student_contact 
+                        FROM engineers WHERE supervisor_id = ?");
+        $stmt->bind_param("i", $supervisor_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        ?>
+        <div>
+            <h2>Assigned Students</h2>
+            <?php if ($result->num_rows > 0): ?>
+                <ul>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <li>
+                            <b>Name:</b> <?php echo htmlspecialchars($row['student_name']); ?><br>
+                            <b>Student Number:</b> <?php echo htmlspecialchars($row['student_number']); ?><br>
+                            <b>Email:</b> <?php echo htmlspecialchars($row['student_email']); ?><br>
+                            <b>Contact:</b> <?php echo htmlspecialchars($row['student_contact']); ?>
+                        </li>
+                        <hr>
+                    <?php endwhile; ?>
+                </ul>
+            <?php else: ?>
+                <p>No students assigned yet.</p>
+            <?php endif; ?>
+        </div>
+
+
 
         <!-- Announcements Section -->
         <?php
