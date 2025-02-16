@@ -51,7 +51,7 @@ session_start();
             <ul>
                 <li><a href="" class="links">Dashboard</a></li>
                 <li><a href="" class="links">Uploads</a></li>                                
-                <li><a href="another_chat_file.php" class="links">Chat</a></li>
+                <li><a href="another_chat_file_student.php" class="links">Chat</a></li>
             </ul>
             <a href="logout.php">Logout..</a>
         </nav>
