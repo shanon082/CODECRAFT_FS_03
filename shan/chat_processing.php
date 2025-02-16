@@ -44,27 +44,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } else {
-// Send to a specific student
-$receiver_id = intval($audience); // Ensure audience contains student_id in this case
+        // Send to a specific student
+        $receiver_id = intval($audience); // Ensure audience contains student_id in this case
 
-// Validate receiver_id (student) exists in the engineers table
-$receiver_check = $conn->query("SELECT id FROM engineers WHERE id = $receiver_id");
+        // Validate receiver_id (student) exists in the engineers table
+        $receiver_check = $conn->query("SELECT id FROM engineers WHERE id = $receiver_id");
 
-if ($receiver_check->num_rows == 0) {
-    die("Error: Receiver ID (Student) does not exist in the database.");
-}
+        if ($receiver_check->num_rows == 0) {
+            die("Error: Receiver ID (Student) does not exist in the database.");
+        }
 
-$stmt = $conn->prepare("INSERT INTO messages (sender_id, receiver_id, audience, message) VALUES (?, ?, 'student', ?)");
-$stmt->bind_param("iis", $sender_id, $receiver_id, $message);
+        $stmt = $conn->prepare("INSERT INTO messages (sender_id, receiver_id, audience, message) VALUES (?, ?, 'student', ?)");
+        $stmt->bind_param("iis", $sender_id, $receiver_id, $message);
 
-if (!$stmt->execute()) {
-    echo "Error executing message insert: " . $stmt->error;
-}
-
+        if (!$stmt->execute()) {
+            echo "Error executing message insert: " . $stmt->error;
+        }
     }
 
     echo "Message sent successfully!";
 } else {
     echo "Invalid request.";
 }
-?>

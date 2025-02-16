@@ -1,12 +1,14 @@
 <?php
 include("db.php");
+include "students_header.php";
 session_start();
-$student_id = $_SESSION['user_id']; 
+$student_id = $_SESSION['user_id'];
 $supervisors_result = $conn->query("SELECT supervisor_id, supervisor_name FROM engineers WHERE student_id = $student_id;");
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,22 +20,24 @@ $supervisors_result = $conn->query("SELECT supervisor_id, supervisor_name FROM e
         }
     </style>
 </head>
+
 <body>
     <div class="contain">
         <h2>Messages from Supervisor</h2>
         <?php
-        // Retrieve the messages for the student
-        $result = $conn->query("SELECT * FROM messages WHERE receiver_id = $student_id OR audience = 'all' ORDER BY sent_at DESC");
-        ?>
-        <ul>
-            <?php while ($msg = $result->fetch_assoc()): ?>
-                <li>
-                    <p><?php echo htmlspecialchars($msg['message']); ?></p>
-                    <small>Sent at: <?php echo htmlspecialchars($msg['sent_at']); ?></small>
-                </li>
-            <?php endwhile; ?>
-        </ul>
 
+        // Query to retrieve messages directed to the student or broadcast to all students
+        $result = $conn->query("SELECT * FROM messages WHERE (receiver_id = $student_id OR audience = 'all') ORDER BY sent_at DESC");
+
+        if ($result->num_rows > 0) {
+            while ($msg = $result->fetch_assoc()) {
+                echo "<p>" . htmlspecialchars($msg['message']) . " - Sent at: " . htmlspecialchars($msg['sent_at']) . "</p>";
+            }
+        } else {
+            echo "No messages available.";
+        }
+
+        ?>
         <h2>Send Message to Supervisor</h2>
         <form method="POST" action="chat_processing_student.php">
             <label for="message">Message:</label>
@@ -51,4 +55,5 @@ $supervisors_result = $conn->query("SELECT supervisor_id, supervisor_name FROM e
         </form>
     </div>
 </body>
+
 </html>

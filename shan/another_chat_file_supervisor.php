@@ -25,19 +25,16 @@ $students = $conn->query("SELECT id, student_name FROM engineers WHERE superviso
     <div class="contain">
         <h2>Student Messages</h2>
         <?php
+        $result = $conn->query("SELECT * FROM messages WHERE sender_id IN (SELECT id FROM engineers WHERE supervisor_id = $supervisor_id) OR audience = 'all' ORDER BY sent_at DESC");
 
-        $supervisor_id = $_SESSION['user_id'];
-
-        $result = $conn->query("SELECT * FROM messages WHERE sender_id IN (SELECT id FROM engineers WHERE supervisor_id = $supervisor_id) ORDER BY sent_at DESC");
+        if ($result->num_rows > 0) {
+            while ($msg = $result->fetch_assoc()) {
+                echo "<p>" . htmlspecialchars($msg['message']) . " - Sent at: " . htmlspecialchars($msg['sent_at']) . "</p>";
+            }
+        } else {
+            echo "No messages available.";
+        }
         ?>
-        <ul>
-            <?php while ($msg = $result->fetch_assoc()): ?>
-                <li>
-                    <p><?php echo htmlspecialchars($msg['message']); ?></p>
-                    <small>Sent at: <?php echo htmlspecialchars($msg['sent_at']); ?></small>
-                </li>
-            <?php endwhile; ?>
-        </ul>
         <h2>Send Message to Students</h2>
         <form method="POST" action="chat_processing.php">
             <label for="message">Message:</label>
