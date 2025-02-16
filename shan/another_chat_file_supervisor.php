@@ -1,7 +1,8 @@
 <?php
+include "supervisor_header.php";
 include("db.php");
 session_start();
-$supervisor_id = $_SESSION['user_id']; // Ensure supervisor is logged in
+$supervisor_id = $_SESSION['user_id'];
 $students = $conn->query("SELECT id, student_name FROM engineers WHERE supervisor_id = $supervisor_id;");
 ?>
 
