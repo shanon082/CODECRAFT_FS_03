@@ -12,12 +12,11 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = $_POST['message'];
     $audience = $_POST['audience'];
-    $sender_id = $_SESSION['user_id']; // Supervisor ID
+    $sender_id = $_SESSION['user_id'];
 
-    // Debugging
-    echo "Sender ID: " . $sender_id; // Check the sender_id value
-    echo "Message: " . $message; // Check the message value
-    echo "Audience: " . $audience; // Check the audience
+    echo "Sender ID: " . $sender_id; 
+    echo "Message: " . $message; 
+    echo "Audience: " . $audience; 
 
     // Validate sender_id exists in the engineers table (Supervisor)
     $sender_check = $conn->query("SELECT id FROM engineers WHERE supervisor_id = $sender_id AND supervisor_id IS NOT NULL");
@@ -27,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($audience == 'all') {
         // Send to all assigned students
-        $students = $conn->query("SELECT student_id, student_email FROM engineers WHERE supervisor_id = $sender_id");
+        $students = $conn->query("SELECT id, student_email FROM engineers WHERE supervisor_id = $sender_id");
         while ($row = $students->fetch_assoc()) {
-            $receiver_id = $row['student_id']; // Use the student_id field here
+            $receiver_id = $row['student_id'];
 
             // Validate receiver_id exists in engineers table
             $receiver_check = $conn->query("SELECT id FROM engineers WHERE student_id = $receiver_id");
@@ -45,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // Send to a specific student
-        $receiver_id = intval($audience); // Ensure audience contains student_id in this case
+        $receiver_id = intval($audience);
 
         // Validate receiver_id (student) exists in the engineers table
         $receiver_check = $conn->query("SELECT id FROM engineers WHERE id = $receiver_id");

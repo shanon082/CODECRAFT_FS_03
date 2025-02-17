@@ -45,7 +45,7 @@ if ($audience !== 'all') {
             echo "Error executing message insert: " . $stmt->error;
         }
     }
-    echo "Message sent to all assigned supervisors!";
+    echo "Message sent to the supervisors!";
 }
 
 ?>

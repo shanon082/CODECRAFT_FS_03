@@ -45,9 +45,9 @@ $supervisors_result = $conn->query("SELECT supervisor_id, supervisor_name FROM e
 
             <label for="audience">Send To:</label>
             <select name="audience" id="audience">
-                <option value="all">All Assigned Supervisors</option>
+                <option value="all">Assigned Supervisor</option>
                 <?php while ($supervisor = $supervisors_result->fetch_assoc()): ?>
-                    <option value="<?php echo $supervisor['supervisor_id']; ?>"><?php echo htmlspecialchars($supervisor['supervisor_name']); ?></option>
+                    <option value="<?php //echo $supervisor['supervisor_id']; ?>"><?php //echo htmlspecialchars($supervisor['supervisor_name']); ?></option>
                 <?php endwhile; ?>
             </select>
 
