@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($audience == 'all') {
         // Send to all assigned students
-        $students = $conn->query("SELECT id, student_email FROM engineers WHERE supervisor_id = $sender_id");
+        $students = $conn->query("SELECT student_id, student_email FROM engineers WHERE supervisor_id = $sender_id");
         while ($row = $students->fetch_assoc()) {
             $receiver_id = $row['student_id'];
 
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $receiver_id = intval($audience);
 
         // Validate receiver_id (student) exists in the engineers table
-        $receiver_check = $conn->query("SELECT id FROM engineers WHERE id = $receiver_id");
+        $receiver_check = $conn->query("SELECT id FROM engineers WHERE student_id = $receiver_id");
 
         if ($receiver_check->num_rows == 0) {
             die("Error: Receiver ID (Student) does not exist in the database.");

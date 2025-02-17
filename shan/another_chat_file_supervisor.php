@@ -3,7 +3,7 @@ include "supervisor_header.php";
 include("db.php");
 session_start();
 $supervisor_id = $_SESSION['user_id'];
-$students = $conn->query("SELECT id, student_name FROM engineers WHERE supervisor_id = $supervisor_id;");
+$students = $conn->query("SELECT student_id, student_name FROM engineers WHERE supervisor_id = $supervisor_id;");
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +46,7 @@ $students = $conn->query("SELECT id, student_name FROM engineers WHERE superviso
             <select name="audience" id="audience">
                 <option value="all">All Assigned Students</option>
                 <?php while ($student = $students->fetch_assoc()): ?>
-                    <option value="<?php echo $student['id']; ?>"><?php echo htmlspecialchars($student['student_name']); ?></option>
+                    <option value="<?php echo $student['student_id']; ?>"><?php echo htmlspecialchars($student['student_name']); ?></option>
                 <?php endwhile; ?>
             </select>
 
