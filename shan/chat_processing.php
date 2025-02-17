@@ -1,12 +1,5 @@
 <?php
 include('db.php');
-require 'PHPMailer/PHPMailer/PHPMailer.php';
-require 'PHPMailer/PHPMailer/SMTP.php';
-require 'PHPMailer/PHPMailer/Exception.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
