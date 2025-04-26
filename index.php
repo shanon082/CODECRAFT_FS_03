@@ -5,19 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Student Management System</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
     <div class="slideshow-container">
         <!-- Slideshow images -->
         <div class="slide fade">
-            <img src="image/slide1.jpg" alt="Slide 1">
+            <img src="./image/school.png" alt="Slide 1">
         </div>
         <div class="slide fade">
-            <img src="image/slide2.jpg" alt="Slide 2">
+            <img src="./image/library.png" alt="Slide 2">
         </div>
         <div class="slide fade">
-            <img src="image/slide3.jpg" alt="Slide 3">
+            <img src="./image/meeting.png" alt="Slide 3">
         </div>
     </div>
     <div class="welcome-overlay">
@@ -31,10 +31,10 @@
             <p>
                 Designed with efficiency and innovation in mind, we’re here to support your academic journey every step of the way.
             </p>
-            <a href="login.php" class="get-started-btn">Get Started</a>
         </div>
+        <a href="loginPage.php" class="get-started-btn">Get Started</a>
     </div>
-    <script>
+    <!-- <script>
         let slideIndex = 0;
         showSlides();
 
@@ -48,8 +48,8 @@
                 slideIndex = 1;
             }
             slides[slideIndex - 1].style.display = "block";
-            setTimeout(showSlides, 5000); // Change slide every 5 seconds
+            setTimeout(showSlides, 1000); // Change slide every 5 seconds
         }
-    </script>
+    </script> -->
 </body>
 </html>

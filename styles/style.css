@@ -3,242 +3,140 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #f4f4f9;
-    overflow-x: hidden;
+body, html {
+    height: 100%;
+    overflow: hidden;
 }
 
-/* Slideshow Styles */
 .slideshow-container {
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     z-index: 1;
 }
 
-.slide {
-    display: none;
-    width: 100%;
-    height: 100%;
-}
-
-.slide img {
+.slideshow-container img{
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.8); /* Slight dim for text readability */
 }
 
-.fade {
-    animation: fade 1.5s ease-in-out;
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: fade 15s infinite;
+}
+
+.slide:nth-child(1) {
+    animation-delay: 0s;
+}
+.slide:nth-child(2) {
+    animation-delay: 5s;
+}
+.slide:nth-child(3) {
+    animation-delay: 10s;
 }
 
 @keyframes fade {
-    from { opacity: 0.4; }
-    to { opacity: 1; }
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    30% { opacity: 1; }
+    40% { opacity: 0; }
+    100% { opacity: 0; }
 }
 
-/* Welcome Overlay */
 .welcome-overlay {
     position: relative;
     z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* dark overlay */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
 }
 
 .welcome-content {
-    max-width: 600px;
-    text-align: center;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    margin: 20px;
-    animation: slideIn 0.8s ease-out;
+    color: #fff;
+    max-width: 800px;
+    height: auto;
+    margin-bottom: 15px;
 }
 
 .welcome-content h1 {
-    font-size: 2.5em;
-    color: #1a1a1a;
-    margin-bottom: 10px;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: slideInDown 1s ease-out forwards;
 }
 
 .subtitle {
-    font-size: 1.3em;
-    color: #007bff;
-    font-weight: 600;
-    margin-bottom: 20px;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
 }
 
-.welcome-content p {
-    font-size: 1.1em;
-    color: #4a4a4a;
-    line-height: 1.7;
-    margin-bottom: 20px;
+.description {
+    font-size: 1rem;
+    margin-bottom: 25px;
+    line-height: 1.6;
 }
 
 .get-started-btn {
-    display: inline-block;
-    padding: 14px 40px;
-    background-color: #007bff;
+    padding: 12px 30px;
+    font-size: 1rem;
     color: #fff;
+    background: #0408f4;
+    border: none;
+    border-radius: 30px;
     text-decoration: none;
-    font-size: 1.2em;
-    font-weight: 500;
-    border-radius: 50px;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background 0.3s, transform 0.3s;
 }
 
 .get-started-btn:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
+    background: #0088cc;
+    transform: translateY(-3px);
 }
 
-/* Animation for content entrance */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
+/* Animation for text */
+.animated-text {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s forwards;
+}
+
+.animated-text[data-delay="0.3s"] {
+    animation-delay: 0.3s;
+}
+.animated-text[data-delay="0.6s"] {
+    animation-delay: 0.6s;
+}
+.animated-text[data-delay="0.9s"] {
+    animation-delay: 0.9s;
+}
+
+@keyframes fadeInUp {
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Login Page Styles (for compatibility with login.php) */
-.container {
-    display: flex;
-    max-width: 900px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    margin: 40px auto;
-}
-
-.image-container {
-    flex: 1;
-}
-
-.image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.form-container {
-    flex: 1;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.form-container h2 {
-    margin-bottom: 20px;
-    color: #1a1a1a;
-    text-align: center;
-    font-size: 1.8em;
-}
-
-.form-container select,
-.form-container input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: border-color 0.3s;
-}
-
-.form-container select:focus,
-.form-container input:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-.form-container a {
-    display: block;
-    text-align: right;
-    color: #007bff;
-    text-decoration: none;
-    margin: 10px 0;
-    font-size: 0.95em;
-}
-
-.form-container a:hover {
-    text-decoration: underline;
-}
-
-.form-container button {
-    width: 100%;
-    padding: 14px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.form-container button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-.error-message {
-    color: #d32f2f;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.95em;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .welcome-content {
-        padding: 20px;
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
     }
-
-    .welcome-content h1 {
-        font-size: 2em;
-    }
-
-    .subtitle {
-        font-size: 1.1em;
-    }
-
-    .get-started-btn {
-        padding: 12px 30px;
-        font-size: 1.1em;
-    }
-
-    .container {
-        flex-direction: column;
-        margin: 20px;
-    }
-
-    .image-container {
-        height: 200px;
-    }
-}
-
-@media (max-width: 480px) {
-    .welcome-content h1 {
-        font-size: 1.8em;
-    }
-
-    .welcome-content p {
-        font-size: 1em;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
