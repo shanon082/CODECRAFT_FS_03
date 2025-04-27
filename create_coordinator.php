@@ -60,20 +60,22 @@ input[type="text"]
     
 </head>
 <body>
-    <div class="container">
-        <h2>Welcome, Administrator</h2>
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
         <h3>Add Coordinator</h3>
         <form action="Add_Coordinator.php" method="POST">
             <input type="text" name="coordinator_name" placeholder="Coordinator Name" required>
             <input type="text" name="coordinator_contact" placeholder="Coordinator Contact" required>
             <input type="text" name="email" placeholder="Coordinator email " required>
             <input type="text" name="password" placeholder="Coordinator password " required>
-
+            <div class="btn-group">
+                    <input type="submit" name="coordinator" value="Add Coordinator">
+                    <button type="button" onclick="closeModal()">Back</button>
+            </div>
             <input type="submit" name="coordinator" value="Add Coordinator">
             
             <button type="button" onclick="window.location.href='Admin_Coordinator_dashboard.php'">Back</button>
 
         </form>
-
     </div>
 </body>

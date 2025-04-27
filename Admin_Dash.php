@@ -1,14 +1,10 @@
 <?php
 session_start();
-//if (!isset($_SESSION['username'])) {
-    //header('Location: index.php');
-    //exit();
-//}
+require_once("db.php");
 
-
-$student_count = 150; // Example: $student_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM students"))['count'];
-$coordinator_count = 10; // Example: $coordinator_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM coordinators"))['count'];
-$supervisor_count = 25; // Example: $supervisor_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM supervisors"))['count'];
+$student_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM students"))['count'];
+$coordinator_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM coordinators"))['count'];
+$supervisor_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM supervisors"))['count'];
 
 ?>
 
@@ -229,7 +225,7 @@ $supervisor_count = 25; // Example: $supervisor_count = mysqli_fetch_assoc(mysql
             <p>Overview of system users and recent activities.</p>
         </div>
         <div class="card-container">
-            <div class="card">
+            <div class="card" hef="Admin_dashboard.php">
                 <h3>Students</h3>
                 <div class="count"><?php echo $student_count; ?></div>
                 <p>Total registered students in the system.</p>

@@ -2,10 +2,7 @@
 session_start();
 
 // Database connection
-$conn = new mysqli("localhost", "root", "", "school_database");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once("db.php");
 
 // Handle add student form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add'])) {
@@ -17,11 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add'])) {
     $role = 'student'; // Default role
     $created_at = date('Y-m-d H:i:s');
 
+     // Hash the password
+     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
     $stmt = $conn->prepare("INSERT INTO students (username, student_number, student_contact, email, password, role, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssss", $student_name, $student_number, $student_contact, $email, $password, $role, $created_at);
+    $stmt->bind_param("sssssss", $student_name, $student_number, $student_contact, $email, $hashed_password, $role, $created_at);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Student added successfully!'); window.location.href = 'manage_students.php';</script>";
+        echo "<script>alert('Student added successfully!'); window.location.href = 'Admin_dashboard.php';</script>";
     } else {
         echo "<script>alert('Error adding student: " . addslashes($stmt->error) . "');</script>";
     }
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_
         $stmt->bind_param("sssssi", $student_name, $student_number, $student_contact, $email, $password, $id);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Student updated successfully!'); window.location.href = 'manage_students.php';</script>";
+            echo "<script>alert('Student updated successfully!'); window.location.href = 'Admin_dashboard.php';</script>";
         } else {
             echo "<script>alert('Error updating student: " . addslashes($stmt->error) . "');</script>";
         }
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_
         $stmt->bind_param("i", $id);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Student deleted successfully!'); window.location.href = 'manage_students.php';</script>";
+            echo "<script>alert('Student deleted successfully!'); window.location.href = 'Admin_dashboard.php';</script>";
         } else {
             echo "<script>alert('Error deleting student: " . addslashes($stmt->error) . "');</script>";
         }
@@ -275,8 +275,12 @@ $conn->close();
             box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
         }
 
+        .modal-content input[name="delete"] {
+            background: red;
+        }
         .modal-content button[name="back"] {
             background: #666;
+            width: 100%;
         }
 
         .modal-content button:hover {
@@ -400,7 +404,7 @@ $conn->close();
                         <th>Email</th>
                         <th>Role</th>
                         <th>Created At</th>
-                        <th>Change</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -415,7 +419,7 @@ $conn->close();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">×</span>
             <h3>Add Student</h3>
-            <form action="manage_students.php" method="POST">
+            <form action="Admin_dashboard.php" method="POST">
                 <input type="text" name="student_name" placeholder="Student Name" required>
                 <input type="text" name="student_number" placeholder="Student Number" required>
                 <input type="text" name="student_contact" placeholder="Student Contact" required>
@@ -434,7 +438,7 @@ $conn->close();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">×</span>
             <h3>Edit Student</h3>
-            <form action="manage_students.php" method="POST">
+            <form action="Admin_dashboard.php" method="POST">
                 <input type="text" name="id" id="edit_id" readonly>
                 <input type="text" name="student_name" id="edit_student_name" placeholder="Student Name" required>
                 <input type="text" name="student_number" id="edit_student_number" placeholder="Student Number" required>
@@ -443,7 +447,7 @@ $conn->close();
                 <input type="password" name="password" id="edit_password" placeholder="Student Password" required>
                 <div class="btn-group">
                     <input type="submit" name="update" value="Update" onclick="return confirm('Are you sure you want to update this record?');">
-                    <input type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
+                    <input type="submit" name="delete" style="background-color: red;" value="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
                     <button type="button" name="back" onclick="closeModal()">Back</button>
                 </div>
             </form>
