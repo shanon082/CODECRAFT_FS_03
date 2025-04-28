@@ -2,10 +2,14 @@
 session_start();
 require_once("db.php");
 
+// Fetch counts for dashboard cards
 $student_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM students"))['count'];
 $coordinator_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM coordinators"))['count'];
 $supervisor_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM supervisors"))['count'];
 
+// Fetch recent activities
+$recent_activities_query = "SELECT user, role, action, DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s') as formatted_date, details FROM activities ORDER BY date DESC LIMIT 10";
+$recent_activities_result = mysqli_query($conn, $recent_activities_query);
 ?>
 
 <!DOCTYPE html>
@@ -225,7 +229,7 @@ $supervisor_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c
             <p>Overview of system users and recent activities.</p>
         </div>
         <div class="card-container">
-            <div class="card" hef="Admin_dashboard.php">
+            <div class="card">
                 <h3>Students</h3>
                 <div class="count"><?php echo $student_count; ?></div>
                 <p>Total registered students in the system.</p>
@@ -254,27 +258,21 @@ $supervisor_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>Student</td>
-                        <td>Submitted Project</td>
-                        <td>2025-04-25</td>
-                        <td><a href="#" class="action-btn">View</a></td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>Coordinator</td>
-                        <td>Approved Proposal</td>
-                        <td>2025-04-24</td>
-                        <td><a href="#" class="action-btn">View</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Adams</td>
-                        <td>Supervisor</td>
-                        <td>Commented on Report</td>
-                        <td>2025-04-23</td>
-                        <td><a href="#" class="action-btn">View</a></td>
-                    </tr>
+                    <?php if (mysqli_num_rows($recent_activities_result) > 0): ?>
+                        <?php while ($activity = mysqli_fetch_assoc($recent_activities_result)): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($activity['user']); ?></td>
+                                <td><?php echo htmlspecialchars($activity['role']); ?></td>
+                                <td><?php echo htmlspecialchars($activity['action']); ?></td>
+                                <td><?php echo htmlspecialchars($activity['formatted_date']); ?></td>
+                                <td><a href="#" class="action-btn" onclick="alert('<?php echo addslashes($activity['details']); ?>')">View</a></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5">No recent activity found.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

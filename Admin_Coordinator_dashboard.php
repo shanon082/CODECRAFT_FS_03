@@ -39,13 +39,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_
         $new_email = $_POST['email'];
         $new_password = $_POST['password'];
 
-        $stmt = $conn->prepare("UPDATE coordinators SET username = ?, coordinator_contact = ?, email = ?, password = ? WHERE id = ?");
-        $stmt->bind_param("ssssi", $new_name,  $new_contact, $new_email, $new_password, $id);
+        // Check if the password field is not empty
+        if (!empty($new_password)) {
+            // Hash the new password
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+            // Update all fields including the password
+            $stmt = $conn->prepare("UPDATE coordinators SET username = ?, coordinator_contact = ?, email = ?, password = ? WHERE id = ?");
+            $stmt->bind_param("ssssi", $new_name, $new_contact, $new_email, $hashed_password, $id);
+        } else {
+            // Update all fields except the password
+            $stmt = $conn->prepare("UPDATE coordinators SET username = ?, coordinator_contact = ?, email = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $new_name, $new_contact, $new_email, $id);
+        }
 
         if ($stmt->execute()) {
-            echo "<script>alert('coordinators updated successfully!'); window.location.href = 'Admin_Coordinator_dashboard.php';</script>";
+            echo "<script>alert('Coordinator updated successfully!'); window.location.href = 'Admin_Coordinator_dashboard.php';</script>";
         } else {
-            echo "<script>alert('Error updating coordinators: " . addslashes($stmt->error) . "');</script>";
+            echo "<script>alert('Error updating coordinator: " . addslashes($stmt->error) . "');</script>";
         }
         $stmt->close();
     } elseif ($action === 'delete') {
@@ -53,19 +64,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_
         $stmt->bind_param("i", $id);
 
         if ($stmt->execute()) {
-            echo "<script>alert('coordinators deleted successfully!'); window.location.href = 'Admin_Coordinator_dashboard.php';</script>";
+            echo "<script>alert('Coordinator deleted successfully!'); window.location.href = 'Admin_Coordinator_dashboard.php';</script>";
         } else {
-            echo "<script>alert('Error deleting coordinators: " . addslashes($stmt->error) . "');</script>";
+            echo "<script>alert('Error deleting coordinator: " . addslashes($stmt->error) . "');</script>";
         }
         $stmt->close();
     }
 }
 
-
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -401,9 +411,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_
         <div class="content-header">
             <h2>Coordinator</h2>
             <button class="add-btn" onclick="openModal('add')">Add Coordinator</button>
-            <!-- <button>
-            <a href="create_coordinator.php">add_coordinator</a>
-        </button> -->
         </div>
         <div class="table-container">
             <table>
@@ -454,7 +461,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_
                 <input type="text" name="coordinator_name" id="edit_Coordinator_name" placeholder="Coordinator Name" required>
                 <input type="text" name="coordinator_contact" id="edit_Coordinator_contact" placeholder="Coordinator Contact" required>
                 <input type="email" name="email" id="edit_email" placeholder="Coordinator Email" required>
-                <input type="password" name="password" id="edit_password" placeholder="Coordinator Password" required>
+                <input type="password" name="password" id="edit_password" placeholder="Coordinator Password">
                 <div class="btn-group">
                     <input type="submit" name="update" value="Update" onclick="return confirm('Are you sure you want to update this record?');">
                     <input type="submit" name="delete" value="Delete" style="background-color: red;" onclick="return confirm('Are you sure you want to delete this record?');">

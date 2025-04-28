@@ -4,7 +4,7 @@ session_start();
 // Database connection
 require_once("db.php");
 
-// Handle add student form submission
+// Handle add supervisor form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add'])) {
     $name = $_POST['supervisor_name'];
     $contact = $_POST['supervisor_contact'];
@@ -12,8 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add'])) {
     $specialization = $_POST['specialization'];
     $password = $_POST['password'];
 
-     // Hash the password
-     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Hash the password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Use prepared statements to prevent SQL injection
     $stmt = $conn->prepare("INSERT INTO supervisors (username, supervisor_contact, email, specialization, password) VALUES (?, ?, ?, ?, ?)");
@@ -42,13 +42,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_
         $new_spec = $_POST['specialization'];
         $new_pass = $_POST['password'];
 
-        $stmt = $conn->prepare("UPDATE supervisors SET username = ?, supervisor_contact = ?, email = ?, specialization = ?, password = ? WHERE id = ?");
-        $stmt->bind_param("sssssi", $new_name, $new_contact, $new_email, $new_spec, $new_pass, $id);
+        // Check if the password field is not empty
+        if (!empty($new_pass)) {
+            // Hash the new password
+            $hashed_password = password_hash($new_pass, PASSWORD_DEFAULT);
+
+            // Update all fields including the password
+            $stmt = $conn->prepare("UPDATE supervisors SET username = ?, supervisor_contact = ?, email = ?, specialization = ?, password = ? WHERE id = ?");
+            $stmt->bind_param("sssssi", $new_name, $new_contact, $new_email, $new_spec, $hashed_password, $id);
+        } else {
+            // Update all fields except the password
+            $stmt = $conn->prepare("UPDATE supervisors SET username = ?, supervisor_contact = ?, email = ?, specialization = ? WHERE id = ?");
+            $stmt->bind_param("ssssi", $new_name, $new_contact, $new_email, $new_spec, $id);
+        }
 
         if ($stmt->execute()) {
             echo "<script>alert('Supervisor updated successfully!'); window.location.href = 'Admin_Supervisor_dashboard.php';</script>";
         } else {
-            echo "<script>alert('Error updating student: " . addslashes($stmt->error) . "');</script>";
+            echo "<script>alert('Error updating supervisor: " . addslashes($stmt->error) . "');</script>";
         }
         $stmt->close();
     } elseif ($action === 'delete') {
@@ -68,7 +79,6 @@ $conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,10 +110,6 @@ $conn->close();
             flex-grow: 1;
             min-height: 100vh;
             animation: fadeIn 0.8s ease-out;
-            background-image: url("./image/log1.jpg");
-            background-size: fill;
-            background-position: center;
-            background-repeat: no-repeat;
         }
 
         .content-header {
@@ -457,7 +463,7 @@ $conn->close();
                 <input type="text" name="supervisor_contact" id="edit_supervisor_contact" placeholder="Supervisor Contact" required>
                 <input type="email" name="email" id="edit_email" placeholder="Supervisor Email" required>
                 <input type="text" name="specialization" id="edit_specialization" placeholder="Specialization" required>
-                <input type="password" name="password" id="edit_password" placeholder="Supervisior Password" required>
+                <input type="password" name="password" id="edit_password" placeholder="Supervisior Password">
                 <div class="btn-group">
                     <input type="submit" name="update" value="Update" onclick="return confirm('Are you sure you want to update this record?');">
                     <input type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure you want to delete this record?');">

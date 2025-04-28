@@ -27,10 +27,10 @@
             <p>
                 Our cutting-edge platform streamlines academic workflows for students, supervisors, and coordinators. 
                 Manage assignments, track progress, and collaborate seamlessly in a secure, user-friendly environment.
-            </p>
+            </p><br>
             <p>
                 Designed with efficiency and innovation in mind, we’re here to support your academic journey every step of the way.
-            </p>
+            </p><br>
         </div>
         <a href="loginPage.php" class="get-started-btn">Get Started</a>
     </div>
